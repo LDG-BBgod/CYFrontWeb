@@ -1,7 +1,9 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux'
 
-const rootReducer = combineReducers({
+import { user } from '../reducers/user'
 
+const rootReducer = combineReducers({
+  user: user,//사용안함 세션스토리지 사용
 })
 
 const store = createStore(rootReducer)

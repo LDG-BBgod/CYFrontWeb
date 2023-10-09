@@ -4,7 +4,7 @@ const Spacer = ({ horizontal = true, space = 0 }) => {
   if (horizontal) {
     return <div style={{ marginTop: space }}></div>
   } else {
-    return <div style={{ marginLeft: space }}></div>
+    return <span style={{ marginLeft: space }}></span>
   }
 }
 
