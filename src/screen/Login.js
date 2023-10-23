@@ -54,9 +54,12 @@ const Login = () => {
               window.sessionStorage.setItem('userType', res.data.msg.type)
               window.sessionStorage.setItem('userId', res.data.msg.id)
               window.sessionStorage.setItem('token', res.data.msg.token)
-              navigate('/dashboard')
+              window.sessionStorage.setItem('isLogin', 'true')
+              navigate('/dashboard/welcome')
             } else {
-              alert('아이디 혹은 비밀번호가 잘못되었습니다.')
+              alert(
+                '아이디 혹은 비밀번호가 잘못되었습니다.\n(회원가입 및 승인처리 후 로그인이 가능합니다.)',
+              )
             }
           }
         })

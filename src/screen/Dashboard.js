@@ -2,16 +2,19 @@
 import { useEffect, useState } from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import { styled } from 'styled-components'
+import axios from 'axios'
 // action
 
 // api
 
 // components
+import Welcome from './Welcome'
 import Patient from './Patient'
 import Reservation from './Reservation'
 import Comunity from './Comunity'
 import Statistics from './Statistics'
 import Setting from './Setting'
+import Message from './Message'
 import Spacer from '../components/Spacer.js'
 import Typography from '../components/Typography'
 // common
@@ -59,10 +62,9 @@ const List = ({ img, text, onClick, isSelected }) => {
 
 const DashBoard = () => {
   const navigate = useNavigate()
-  // const userType = window.sessionStorage.getItem('userType')
-  // const userId = window.sessionStorage.getItem('userId')
-  // const token = window.sessionStorage.getItem('token')
-  const [selectedList, setSelectedList] = useState('')
+  const [selectedList, setSelectedList] = useState(
+    window.location.pathname.split('/')[2],
+  )
   const [title, setTitle] = useState('대쉬보드')
 
   const handleOnClick = (name) => {
@@ -71,7 +73,13 @@ const DashBoard = () => {
   }
 
   useEffect(() => {
-    switch (selectedList) {
+    const regexSetting = /setting/
+    const route = regexSetting.test(selectedList) ? 'setting' : selectedList
+
+    switch (route) {
+      case 'welcome':
+        setTitle('Welcome')
+        break
       case 'patient':
         setTitle('환자관리')
         break
@@ -87,16 +95,79 @@ const DashBoard = () => {
       case 'setting':
         setTitle('환경설정')
         break
+      case 'message':
+        setTitle('메세지')
+        break
       default:
         setTitle('대쉬보드')
         break
     }
   }, [selectedList])
 
+  useEffect(() => {
+    const isLogin = window.sessionStorage.getItem('isLogin')
+
+    if (isLogin === 'true') {
+      const userType = window.sessionStorage.getItem('userType')
+      const userId = window.sessionStorage.getItem('userId')
+      const token = window.sessionStorage.getItem('token')
+
+      const getInfo = async () => {
+        await axios
+          .post(
+            userType === 'hospital'
+              ? process.env.REACT_APP_READHOSPITAL
+              : process.env.REACT_APP_READCENTER,
+            { userId, token },
+          )
+          .then((res) => {
+            window.sessionStorage.setItem(
+              'hospitalName',
+              res.data.msg.hospitalName,
+            )
+            window.sessionStorage.setItem('doctorName', res.data.msg.doctorName)
+            window.sessionStorage.setItem('address1', res.data.msg.address1)
+            window.sessionStorage.setItem('address2', res.data.msg.address2)
+            window.sessionStorage.setItem('address3', res.data.msg.address3)
+            window.sessionStorage.setItem('bn', res.data.msg.bn)
+            window.sessionStorage.setItem('email', res.data.msg.email)
+            window.sessionStorage.setItem(
+              'introduction',
+              res.data.msg.introduction,
+            )
+            window.sessionStorage.setItem(
+              'imageUrls',
+              JSON.stringify(res.data.msg.imageUrls),
+            )
+            window.sessionStorage.setItem(
+              'initSetting',
+              res.data.msg.initSetting,
+            )
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+      }
+      getInfo()
+    } else {
+      navigate('/login')
+    }
+  }, [])
+
   return (
     <div style={{ background: gray3 }}>
       <CHeader>
-        <img src="/img/logo_green.svg" alt="로고" height={40} width={50} />
+        <img
+          style={{ cursor: 'pointer' }}
+          src="/img/logo_green.svg"
+          alt="로고"
+          height={40}
+          width={50}
+          onClick={() => {
+            navigate('/dashboard/welcome')
+            setSelectedList('welcome')
+          }}
+        />
         <CHeaderRight>
           <img
             src="/img/message.svg"
@@ -104,6 +175,10 @@ const DashBoard = () => {
             height={20}
             width={20}
             style={{ cursor: 'pointer' }}
+            onClick={() => {
+              navigate('/dashboard/message')
+              setSelectedList('message')
+            }}
           />
           <Spacer horizontal={false} space={28} />
           <img
@@ -141,7 +216,7 @@ const DashBoard = () => {
             onClick={() => {
               handleOnClick('patient')
             }}
-            isSelected={selectedList === 'patient'}
+            isSelected={selectedList.includes('patient')}
           />
           <List
             img={listImg1_2}
@@ -149,7 +224,7 @@ const DashBoard = () => {
             onClick={() => {
               handleOnClick('reservation')
             }}
-            isSelected={selectedList === 'reservation'}
+            isSelected={selectedList.includes('reservation')}
           />
           <List
             img={listImg1_3}
@@ -157,7 +232,7 @@ const DashBoard = () => {
             onClick={() => {
               handleOnClick('comunity')
             }}
-            isSelected={selectedList === 'comunity'}
+            isSelected={selectedList.includes('comunity')}
           />
           <Spacer space={40} />
           <div style={{ marginRight: 'auto', marginLeft: 15 }}>
@@ -172,15 +247,15 @@ const DashBoard = () => {
             onClick={() => {
               handleOnClick('statistics')
             }}
-            isSelected={selectedList === 'statistics'}
+            isSelected={selectedList.includes('statistics')}
           />
           <List
             img={listImg2_2}
             text={'환경설정'}
             onClick={() => {
-              handleOnClick('setting')
+              handleOnClick('setting/account')
             }}
-            isSelected={selectedList === 'setting'}
+            isSelected={selectedList.includes('setting')}
           />
         </CList>
         <CContent>
@@ -189,11 +264,13 @@ const DashBoard = () => {
           </Typography>
           <Spacer space={30} />
           <Routes>
+            <Route path="/welcome" Component={Welcome} />
             <Route path="/patient" Component={Patient} />
             <Route path="/reservation" Component={Reservation} />
             <Route path="/comunity" Component={Comunity} />
             <Route path="/statistics" Component={Statistics} />
-            <Route path="/setting" Component={Setting} />
+            <Route path="/setting/*" Component={Setting} />
+            <Route path="/message" Component={Message} />
           </Routes>
         </CContent>
       </CBody>
@@ -232,5 +309,7 @@ const CList = styled.div`
   align-items: center;
 `
 const CContent = styled.div`
+  overflow: auto;
+  box-sizing: border-box;
   padding: 30px 20px 20px 30px;
 `

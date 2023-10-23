@@ -28,17 +28,18 @@ const Hospital = () => {
     try {
       const imageFormData = new FormData()
       for (let i = 0; i < formData.images.length; i++) {
+        console.log(formData.images[i])
         imageFormData.append('images', formData.images[i])
       }
       imageFormData.append('jsonField', JSON.stringify(formData))
       // 아이디 존재 여부 체크 필수!!
-      await axios
-        .post(process.env.REACT_APP_CREATEHOSPITAL, imageFormData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        })
-        .then((res) => {
-          console.log(res.data)
-        })
+      // await axios
+      //   .post(process.env.REACT_APP_CREATEHOSPITAL, imageFormData, {
+      //     headers: { 'Content-Type': 'multipart/form-data' },
+      //   })
+      //   .then((res) => {
+      //     console.log(res.data)
+      //   })
     } catch (err) {
       console.log(err)
     }
