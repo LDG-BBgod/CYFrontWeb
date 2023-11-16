@@ -33,10 +33,10 @@ const Account = () => {
       for (let i = 0; i < imgUrls.length; i++) {
         console.log(
           '이미지 얻어오기 : ',
-          `${process.env.REACT_APP_BACKEND}${imgUrls[i]}`,
+          `${process.env.REACT_APP_BACKEND}${imgUrls[i]}`.replace(/\\/g, '/'),
         )
         const img = await axios.get(
-          `${process.env.REACT_APP_BACKEND}${imgUrls[i]}`,
+          `${process.env.REACT_APP_BACKEND}${imgUrls[i]}`.replace(/\\/g, '/'),
           {
             responseType: 'arraybuffer',
           },
