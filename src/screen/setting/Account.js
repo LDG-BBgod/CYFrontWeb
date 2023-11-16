@@ -31,7 +31,10 @@ const Account = () => {
       const tempImages = []
       const tempImagesUrl = []
       for (let i = 0; i < imgUrls.length; i++) {
-        console.log('이미지 얻어오기')
+        console.log(
+          '이미지 얻어오기 : ',
+          `${process.env.REACT_APP_BACKEND}${imgUrls[i]}`,
+        )
         const img = await axios.get(
           `${process.env.REACT_APP_BACKEND}${imgUrls[i]}`,
           {
