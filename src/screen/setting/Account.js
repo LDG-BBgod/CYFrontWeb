@@ -25,19 +25,20 @@ const Account = () => {
     imagesUrl2: null,
     imagesUrl3: null,
   })
-
   useEffect(() => {
     const test = async () => {
       const imgUrls = JSON.parse(window.sessionStorage.getItem('imageUrls'))
       const tempImages = []
       const tempImagesUrl = []
       for (let i = 0; i < imgUrls.length; i++) {
+        console.log('이미지 얻어오기')
         const img = await axios.get(
           `${process.env.REACT_APP_BACKEND}${imgUrls[i]}`,
           {
             responseType: 'arraybuffer',
           },
         )
+        console.log(img)
         const fileName = imgUrls[i].split('^')[imgUrls[i].split('^').length - 1]
         const blob = new Blob([img.data, { type: 'image/jpeg' }])
         const file = new File([blob], `${fileName}`, { type: 'image/jpeg' })
