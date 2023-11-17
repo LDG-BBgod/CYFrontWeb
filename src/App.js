@@ -5,6 +5,7 @@ import Home from './screen/Home'
 import Login from './screen/Login'
 import Register from './screen/Register'
 import DashBoard from './screen/Dashboard'
+import Test from './screen/Test'
 
 function App() {
   return (
@@ -15,6 +16,8 @@ function App() {
         <Route path="/login" Component={Login} />
         <Route path="/register" Component={Register} />
         <Route path="/dashboard/*" Component={DashBoard} />
+
+        <Route path="/test" Component={Test} />
       </Routes>
     </div>
   )

@@ -33,10 +33,11 @@ const Account = () => {
       for (let i = 0; i < imgUrls.length; i++) {
         console.log(
           '이미지 얻어오기 : ',
-          `${process.env.REACT_APP_BACKEND}${imgUrls[i]}`.replace(/\\/g, '/'),
+          // .replace(/\\/g, '/')
+          `${process.env.REACT_APP_BACKEND}${imgUrls[i]}`,
         )
         const img = await axios.get(
-          `${process.env.REACT_APP_BACKEND}${imgUrls[i]}`.replace(/\\/g, '/'),
+          `${process.env.REACT_APP_BACKEND}${imgUrls[i]}`,
           {
             responseType: 'arraybuffer',
           },
@@ -82,7 +83,6 @@ const Account = () => {
     input.click()
   }
   const handleButton = async () => {
-    console.log(formData)
     try {
       const reqFormData = new FormData()
       if (formData.images1) {
