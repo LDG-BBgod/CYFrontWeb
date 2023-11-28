@@ -11,7 +11,7 @@ import axios from 'axios'
 import Typography from '../components/Typography'
 import Spacer from '../components/Spacer.js'
 import Account from './setting/Account'
-import Etc from './setting/Etc'
+import Member from './setting/Member'
 import Reserve from './setting/Reserve'
 // common
 import { green, gray4, gray5, white } from '../common'
@@ -64,26 +64,26 @@ const Setting = () => {
           isSelected={selectedList === 'account'}
         />
         <List
+          text={'구성원 관리'}
+          onClick={() => {
+            handleOnClick('member')
+          }}
+          isSelected={selectedList === 'member'}
+        />
+        <List
           text={'예약관리'}
           onClick={() => {
             handleOnClick('reserve')
           }}
           isSelected={selectedList === 'reserve'}
         />
-        <List
-          text={'기타'}
-          onClick={() => {
-            handleOnClick('etc')
-          }}
-          isSelected={selectedList === 'etc'}
-        />
       </CList>
       <Spacer horizontal={false} space={5} />
       <CContent>
         <Routes>
           <Route path="/account" Component={Account} />
+          <Route path="/member" Component={Member} />
           <Route path="/reserve" Component={Reserve} />
-          <Route path="/etc" Component={Etc} />
         </Routes>
       </CContent>
     </CBody>

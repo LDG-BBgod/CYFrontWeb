@@ -54,6 +54,7 @@ const Login = () => {
               window.sessionStorage.setItem('userType', res.data.msg.type)
               window.sessionStorage.setItem('userId', res.data.msg.id)
               window.sessionStorage.setItem('token', res.data.msg.token)
+              window.sessionStorage.setItem('OID', res.data.msg.OID)
               window.sessionStorage.setItem('isLogin', 'true')
               navigate('/dashboard/welcome')
             } else {
@@ -72,7 +73,7 @@ const Login = () => {
   return (
     <div>
       <CCenter>
-        <img src="img/logo_green.svg" alt="로고" height={300} width={200} />
+        <img src="img/mobilepc.png" alt="로고" height={464} width={591} />
         <Spacer horizontal={false} space={70} />
         <div>
           <CBox>

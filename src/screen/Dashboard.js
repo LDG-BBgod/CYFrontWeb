@@ -62,6 +62,7 @@ const List = ({ img, text, onClick, isSelected }) => {
 
 const DashBoard = () => {
   const navigate = useNavigate()
+  const [initSetting, setInitSetting] = useState('false')
   const [selectedList, setSelectedList] = useState(
     window.location.pathname.split('/')[2],
   )
@@ -108,29 +109,41 @@ const DashBoard = () => {
     const isLogin = window.sessionStorage.getItem('isLogin')
 
     if (isLogin === 'true') {
-      const userType = window.sessionStorage.getItem('userType')
-      const userId = window.sessionStorage.getItem('userId')
-      const token = window.sessionStorage.getItem('token')
+      const OID = window.sessionStorage.getItem('OID')
 
       const getInfo = async () => {
         await axios
-          .post(
-            userType === 'hospital'
-              ? process.env.REACT_APP_READHOSPITAL
-              : process.env.REACT_APP_READCENTER,
-            { userId, token },
-          )
+          .post(process.env.REACT_APP_HOSPITAL_READ, { OID })
           .then((res) => {
+            window.sessionStorage.setItem(
+              'hospitalType',
+              res.data.msg.hospitalType,
+            )
             window.sessionStorage.setItem(
               'hospitalName',
               res.data.msg.hospitalName,
             )
-            window.sessionStorage.setItem('doctorName', res.data.msg.doctorName)
             window.sessionStorage.setItem('address1', res.data.msg.address1)
             window.sessionStorage.setItem('address2', res.data.msg.address2)
             window.sessionStorage.setItem('address3', res.data.msg.address3)
+            window.sessionStorage.setItem(
+              'hospitalPhone',
+              res.data.msg.hospitalPhone,
+            )
             window.sessionStorage.setItem('bn', res.data.msg.bn)
+
+            window.sessionStorage.setItem('doctorName', res.data.msg.doctorName)
+            window.sessionStorage.setItem(
+              'licenseType',
+              res.data.msg.licenseType,
+            )
+            window.sessionStorage.setItem('license', res.data.msg.license)
+            window.sessionStorage.setItem(
+              'doctorPhone',
+              res.data.msg.doctorPhone,
+            )
             window.sessionStorage.setItem('email', res.data.msg.email)
+
             window.sessionStorage.setItem(
               'introduction',
               res.data.msg.introduction,
@@ -143,6 +156,30 @@ const DashBoard = () => {
               'initSetting',
               res.data.msg.initSetting,
             )
+            setInitSetting(res.data.msg.initSetting)
+            window.sessionStorage.setItem(
+              'timeSection',
+              res.data.msg.timeSection,
+            )
+            window.sessionStorage.setItem('daySH', res.data.msg.daySH)
+            window.sessionStorage.setItem('daySM', res.data.msg.daySM)
+            window.sessionStorage.setItem('dayEH', res.data.msg.dayEH)
+            window.sessionStorage.setItem('dayEM', res.data.msg.dayEM)
+            window.sessionStorage.setItem('skipWeek1', res.data.msg.skipWeek1)
+            window.sessionStorage.setItem('week1SH', res.data.msg.week1SH)
+            window.sessionStorage.setItem('week1SM', res.data.msg.week1SM)
+            window.sessionStorage.setItem('week1EH', res.data.msg.week1EH)
+            window.sessionStorage.setItem('week1EM', res.data.msg.week1EM)
+            window.sessionStorage.setItem('skipWeek2', res.data.msg.skipWeek2)
+            window.sessionStorage.setItem('week2SH', res.data.msg.week2SH)
+            window.sessionStorage.setItem('week2SM', res.data.msg.week2SM)
+            window.sessionStorage.setItem('week2EH', res.data.msg.week2EH)
+            window.sessionStorage.setItem('week2EM', res.data.msg.week2EM)
+            window.sessionStorage.setItem('skipLunch', res.data.msg.skipLunch)
+            window.sessionStorage.setItem('lunchSH', res.data.msg.lunchSH)
+            window.sessionStorage.setItem('lunchSM', res.data.msg.lunchSM)
+            window.sessionStorage.setItem('lunchEH', res.data.msg.lunchEH)
+            window.sessionStorage.setItem('lunchEM', res.data.msg.lunchEM)
           })
           .catch((err) => {
             console.error(err)
@@ -153,7 +190,6 @@ const DashBoard = () => {
       navigate('/login')
     }
   }, [])
-
   return (
     <div style={{ background: gray3 }}>
       <CHeader>
@@ -264,7 +300,10 @@ const DashBoard = () => {
           </Typography>
           <Spacer space={30} />
           <Routes>
-            <Route path="/welcome" Component={Welcome} />
+            <Route
+              path="/welcome"
+              element={<Welcome isInitSetting={initSetting} />}
+            />
             <Route path="/patient" Component={Patient} />
             <Route path="/reservation" Component={Reservation} />
             <Route path="/comunity" Component={Comunity} />

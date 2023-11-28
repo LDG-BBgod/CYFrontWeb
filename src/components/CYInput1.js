@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { styled } from 'styled-components'
-import Spacer from './Spacer.js.js'
+import Spacer from './Spacer.js'
 import Typography from './Typography.js'
 import { gray1, green } from '../common.js'
 

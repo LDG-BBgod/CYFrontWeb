@@ -1,15 +1,15 @@
 import { useState, useRef } from 'react'
 import { styled } from 'styled-components'
-import Spacer from './Spacer.js.js'
+import Spacer from './Spacer.js'
 import Typography from './Typography.js'
-import { gray1, green, lightBlue } from '../common.js'
+import { gray1, green, lightBlue, black } from '../common.js'
 
 const CYInput2 = ({
   title,
   type = 'default',
   placeholer = '',
   onValueChange,
-  value
+  value,
 }) => {
   const [isFocused, setIsFocused] = useState(false)
   const inputRef = useRef(null)
@@ -30,7 +30,7 @@ const CYInput2 = ({
 
   return (
     <CBox>
-      <Typography fontSize={20} color={green} fontWeight="bold">
+      <Typography fontSize={20} color={black} fontWeight="bold">
         {title}
       </Typography>
       <Spacer space={12} />
@@ -44,7 +44,7 @@ const CYInput2 = ({
           border: isFocused ? `solid 1px ${green}` : `solid 1px ${gray1}`,
           borderRadius: 10,
           fontSize: 14,
-          backgroundColor: lightBlue
+          backgroundColor: lightBlue,
         }}
         value={value}
         ref={inputRef}

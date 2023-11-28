@@ -10,6 +10,7 @@ import axios from 'axios'
 // components
 import Typography from '../../components/Typography'
 import Spacer from '../../components/Spacer.js'
+import CYButton1 from '../../components/CYButton1.js'
 // common
 import { gray2, gray4, gray5, gray6, gray7 } from '../../common'
 
@@ -30,38 +31,38 @@ const Account = () => {
       const imgUrls = JSON.parse(window.sessionStorage.getItem('imageUrls'))
       const tempImages = []
       const tempImagesUrl = []
-      for (let i = 0; i < imgUrls.length; i++) {
-        console.log(
-          '이미지 얻어오기 : ',
-          // .replace(/\\/g, '/')
-          `${process.env.REACT_APP_BACKEND}${imgUrls[i]}`,
-        )
-        const img = await axios.get(
-          `${process.env.REACT_APP_BACKEND}${imgUrls[i]}`,
-          {
-            responseType: 'arraybuffer',
-          },
-        )
-        console.log(img)
-        const fileName = imgUrls[i].split('^')[imgUrls[i].split('^').length - 1]
-        const blob = new Blob([img.data, { type: 'image/jpeg' }])
-        const file = new File([blob], `${fileName}`, { type: 'image/jpeg' })
-        if (file) {
-          const imageUrl = URL.createObjectURL(file)
-          tempImages.push(file)
-          tempImagesUrl.push(imageUrl)
+      try {
+        for (let i = 0; i < imgUrls.length; i++) {
+          const img = await axios.get(
+            `${process.env.REACT_APP_BACKEND}${imgUrls[i]}`,
+            {
+              responseType: 'arraybuffer',
+            },
+          )
+          const fileName =
+            imgUrls[i].split('^')[imgUrls[i].split('^').length - 1]
+          const blob = new Blob([img.data, { type: 'image/jpeg' }])
+          const file = new File([blob], `${fileName}`, { type: 'image/jpeg' })
+          if (file) {
+            const imageUrl = URL.createObjectURL(file)
+            tempImages.push(file)
+            tempImagesUrl.push(imageUrl)
+          }
         }
+        setFormData({
+          ...formData,
+          images1: tempImages[0] || null,
+          images2: tempImages[1] || null,
+          images3: tempImages[2] || null,
+          imagesUrl1: tempImagesUrl[0] || null,
+          imagesUrl2: tempImagesUrl[1] || null,
+          imagesUrl3: tempImagesUrl[2] || null,
+        })
+      } catch (err) {
+        console.error(err)
       }
-      setFormData({
-        ...formData,
-        images1: tempImages[0] || null,
-        images2: tempImages[1] || null,
-        images3: tempImages[2] || null,
-        imagesUrl1: tempImagesUrl[0] || null,
-        imagesUrl2: tempImagesUrl[1] || null,
-        imagesUrl3: tempImagesUrl[2] || null,
-      })
     }
+
     test()
   }, [])
 
@@ -96,21 +97,13 @@ const Account = () => {
       }
       reqFormData.append('jsonField', JSON.stringify(formData))
       await axios
-        .post(process.env.REACT_APP_UPDATEIMGINTROHOSPITAL, reqFormData, {
+        .post(process.env.REACT_APP_HOSPITAL_UPDATEIMGINTRO, reqFormData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         })
         .then(async () => {
-          const userType = window.sessionStorage.getItem('userType')
-          const userId = window.sessionStorage.getItem('userId')
-          const token = window.sessionStorage.getItem('token')
-
+          const OID = window.sessionStorage.getItem('OID')
           await axios
-            .post(
-              userType === 'hospital'
-                ? process.env.REACT_APP_READHOSPITAL
-                : process.env.REACT_APP_READCENTER,
-              { userId, token },
-            )
+            .post(process.env.REACT_APP_HOSPITAL_READ, { OID })
             .then((res) => {
               window.sessionStorage.setItem(
                 'introduction',
@@ -137,7 +130,7 @@ const Account = () => {
       <Typography fontSize={24} color={gray6}>
         계정관리
       </Typography>
-      <Spacer space={80} />
+      <Spacer space={60} />
       <CGrid>
         <CContent>
           <Typography fontSize={20} color={gray4}>
@@ -203,7 +196,7 @@ const Account = () => {
           setFormData({ ...formData, introduction: e.target.value })
         }}
       />
-      <Spacer space={30} />
+      <Spacer space={60} />
       <Typography fontSize={20} color={gray4}>
         병원이미지(최대 3개)
       </Typography>
@@ -238,11 +231,16 @@ const Account = () => {
       <Typography fontSize={14} color={gray2}>
         가장 앞의 이미지가 대표 이미지로 설정됩니다.
       </Typography>
-      <Spacer space={20} />
-      <button style={{ width: 200, height: 40 }} onClick={handleButton}>
-        저장하기
-      </button>
-      <Spacer space={100} />
+      <Spacer space={40} />
+      <div style={{ marginLeft: 'auto' }}>
+        <CYButton1
+          buttonFunc={handleButton}
+          text={'저장하기'}
+          width={200}
+          height={40}
+        />
+      </div>
+      <Spacer space={50} />
     </div>
   )
 }
@@ -261,7 +259,7 @@ const CContent = styled.div`
 `
 const CTextArea = styled.textarea`
   box-sizing: border-box;
-  min-height: 100px;
+  min-height: 120px;
   width: 100%;
   border: none;
   background: ${gray5};

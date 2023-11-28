@@ -1,8 +1,8 @@
 import { useState, useRef } from 'react'
 import { styled } from 'styled-components'
-import Spacer from './Spacer.js.js'
+import Spacer from './Spacer.js'
 import Typography from './Typography.js'
-import { gray1, green, lightBlue, white } from '../common.js'
+import { gray1, green, lightBlue, white, black } from '../common.js'
 
 const CYInputAddress = ({
   title,
@@ -31,7 +31,7 @@ const CYInputAddress = ({
 
   return (
     <CBox>
-      <Typography fontSize={20} color={green} fontWeight="bold">
+      <Typography fontSize={20} color={black} fontWeight="bold">
         {title}
       </Typography>
       <Spacer space={12} />
