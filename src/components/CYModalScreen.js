@@ -1,6 +1,5 @@
 import React from 'react'
 import { styled } from 'styled-components'
-import { useSelector } from 'react-redux'
 
 import Spacer from './Spacer'
 
@@ -13,7 +12,7 @@ function replaceNewlinesWithBr(text) {
   ))
 }
 
-const ModalScreen = ({
+const CYModalScreen = ({
   title = '',
   content = '',
   buttonText = '',
@@ -34,7 +33,7 @@ const ModalScreen = ({
     </div>
   )
 }
-export default ModalScreen
+export default CYModalScreen
 
 const CModalContainer = styled.div`
   position: fixed;

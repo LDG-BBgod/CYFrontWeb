@@ -1,6 +1,7 @@
 // module
 import { useEffect, useState } from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom'
+import { useDispatch, batch } from 'react-redux'
 import { styled } from 'styled-components'
 import axios from 'axios'
 // action
@@ -15,8 +16,11 @@ import Comunity from './Comunity'
 import Statistics from './Statistics'
 import Setting from './Setting'
 import Message from './Message'
+import Test from './Test'
+
 import Spacer from '../components/Spacer.js'
 import Typography from '../components/Typography'
+import CYLoading from '../components/CYLoading.js'
 // common
 import { green, white, gray3, gray4, gray5, gray6 } from '../common'
 import listImg1_1 from '../srcImg/listImg1_1.svg'
@@ -33,7 +37,6 @@ const List = ({ img, text, onClick, isSelected }) => {
         display: 'flex',
         alignItems: 'center',
         width: '100%',
-
         paddingTop: 10,
         paddingBottom: 10,
         paddingLeft: isSelected ? 12 : 15,
@@ -63,11 +66,10 @@ const List = ({ img, text, onClick, isSelected }) => {
 const DashBoard = () => {
   const navigate = useNavigate()
   const [initSetting, setInitSetting] = useState('false')
+  const [title, setTitle] = useState('대쉬보드')
   const [selectedList, setSelectedList] = useState(
     window.location.pathname.split('/')[2],
   )
-  const [title, setTitle] = useState('대쉬보드')
-
   const handleOnClick = (name) => {
     navigate(`/dashboard/${name}`)
     setSelectedList(name)
@@ -143,7 +145,6 @@ const DashBoard = () => {
               res.data.msg.doctorPhone,
             )
             window.sessionStorage.setItem('email', res.data.msg.email)
-
             window.sessionStorage.setItem(
               'introduction',
               res.data.msg.introduction,
@@ -294,6 +295,7 @@ const DashBoard = () => {
             isSelected={selectedList.includes('setting')}
           />
         </CList>
+
         <CContent>
           <Typography fontSize={28} color={gray6}>
             {title}
@@ -310,6 +312,7 @@ const DashBoard = () => {
             <Route path="/statistics" Component={Statistics} />
             <Route path="/setting/*" Component={Setting} />
             <Route path="/message" Component={Message} />
+            <Route path="/test" Component={Test} />
           </Routes>
         </CContent>
       </CBody>

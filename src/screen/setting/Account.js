@@ -27,7 +27,7 @@ const Account = () => {
     imagesUrl3: null,
   })
   useEffect(() => {
-    const test = async () => {
+    const makeImg = async () => {
       const imgUrls = JSON.parse(window.sessionStorage.getItem('imageUrls'))
       const tempImages = []
       const tempImagesUrl = []
@@ -63,7 +63,7 @@ const Account = () => {
       }
     }
 
-    test()
+    makeImg()
   }, [])
 
   const handleImgClick = (i) => {

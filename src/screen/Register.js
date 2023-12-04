@@ -285,23 +285,6 @@ const Rgister = () => {
   const [modalState, setModalState] = useState(false)
   const [modalEmail, setModalEmail] = useState(false)
   const [modalPhone, setModalPhone] = useState(false)
-  const tempData = {
-    id: 'padzz321',
-    pw: 'ldg8410229!',
-    pwCheck: 'ldg8410229!',
-    hospitalType: '병원',
-    hospitalName: '테스트병원',
-    address1: '충남',
-    address2: '계룡시',
-    address3: '갈마로',
-    hospitalPhone: '0428410229',
-    bn: '12345678',
-    doctorName: '이동권',
-    licenseType: '전문의',
-    license: '12341234',
-    doctorPhone: '01054088229',
-    email: 'padzz321@naver.com',
-  }
   const initData = {
     id: '',
     pw: '',
@@ -331,7 +314,7 @@ const Rgister = () => {
     '간호사',
     '간호조무사',
   ]
-  const [data, setData] = useState(tempData)
+  const [data, setData] = useState(initData)
 
   const idLogic = (val) => {
     const regex = /^[a-zA-Z0-9가-힣]+$/

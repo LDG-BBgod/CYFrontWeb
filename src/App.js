@@ -6,15 +6,12 @@ import Login from './screen/Login'
 import Register from './screen/Register'
 import SubRegister from './screen/SubRegister'
 import DashBoard from './screen/Dashboard'
-import ModalScreen from './components/ModalScreen'
-import Test from './screen/Test'
+import CYModalScreen from './components/CYModalScreen'
 
 function App() {
-  const dispatch = useDispatch()
   const { isOpen, title, content, buttonText, buttonFunc } = useSelector(
     (state) => state.modal,
   )
-
   return (
     <div className="App">
       <Routes>
@@ -23,11 +20,9 @@ function App() {
         <Route path="/register" Component={Register} />
         <Route path="/SubRegister" Component={SubRegister} />
         <Route path="/dashboard/*" Component={DashBoard} />
-
-        <Route path="/test" Component={Test} />
       </Routes>
       {isOpen && (
-        <ModalScreen
+        <CYModalScreen
           title={title}
           content={content}
           buttonText={buttonText}
